@@ -1,5 +1,5 @@
 {
-  "name": "messageway/php-lib",
+  "name": "messageway/messagewayphp",
   "description": "This SDK allows you to connect to MSGWay.com server from your php application.",
   "type": "library",
   "keywords": [
