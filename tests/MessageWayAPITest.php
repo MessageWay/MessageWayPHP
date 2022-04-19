@@ -1,10 +1,8 @@
 <?php
-require dirname(__FILE__) . '/../vendor/autoload.php';
-
 use MessageWay\Api\MessageWayAPI;
 use PHPUnit\Framework\TestCase;
 
-class TestMessageWayAPI extends TestCase
+class MessageWayAPITest extends TestCase
 {
 
 	private static MessageWayAPI $messageWay;
@@ -45,13 +43,13 @@ class TestMessageWayAPI extends TestCase
 	}
 
 	/**
-	 * @depends testSendBySMS
+	 * @depends testSendViaSMS
 	 * @throws Exception
 	 */
 	public function testCheckStatus(string $referenceID)
 	{
 		$status = self::$messageWay->getStatus($referenceID);
-		$this->assertContains($status['OTPStatus'], ['pending', 'sent']);
+		$this->assertContains($status['OTPStatus'], ['pending', 'sent', 'operatorDelivered']);
 		$this->assertEquals(false,$status['OTPVerified']);
 		$this->assertContains($status['OTPMethod'], ['sms', 'ivr', 'email', 'messenger']);
 	}
@@ -86,7 +84,7 @@ class TestMessageWayAPI extends TestCase
 			->setLength(strlen($otpCode))
 			->setProvider(2)
 			->send('messenger');
-		$this->assertIsString($referenceID);
+		$this->assertIsString($referenceID['referenceID']);
 		return $otpCode;
 	}
 
