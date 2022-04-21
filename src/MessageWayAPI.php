@@ -11,7 +11,7 @@ use InvalidArgumentException;
 class MessageWayAPI
 {
 	protected const
-		VERSION = '1.0.0',
+		VERSION = '1.0.1',
 		BASEURL = 'https://api.msgway.com',
 		ACCEPT_LANGUAGE = 'fa',
 
@@ -20,7 +20,7 @@ class MessageWayAPI
 		ENDPOINT_VERIFY = "/otp/verify",
 
 		MESSENGER_PROVIDERS = [1 => 'whatsapp', 2 => 'gap'],
-		SMS_PROVIDERS = [1 => '3000', 2 => '2000', 3 => '9000'],
+		SMS_PROVIDERS = [1 => '3000x', 2 => '2000x', 3 => '9000x'],
 		IVR_PROVIDERS = [1 => 'ivr'];
 
 	/**
@@ -342,8 +342,8 @@ class MessageWayAPI
 	public function sendViaSMS(string $mobile, int $templateID, int $provider = 1, array $options = []):array
 	{
 		$provider = $this->prepareProviders($provider,self::SMS_PROVIDERS);
-		return $this->setMethod('sms')
-			->setConfig($options)
+		return $this->setConfig($options)
+			->setMethod('sms')
 			->setMobile($mobile)
 			->setProvider($provider)
 			->setTemplateID($templateID)
@@ -361,8 +361,8 @@ class MessageWayAPI
 	public function sendViaMessenger(string $mobile, int $templateID, $provider, array $options = []):array
 	{
 		$provider = $this->prepareProviders($provider,self::MESSENGER_PROVIDERS);
-		return $this->setMethod('messenger')
-			->setConfig($options)
+		return $this->setConfig($options)
+			->setMethod('messenger')
 			->setMobile($mobile)
 			->setProvider($provider)
 			->setTemplateID($templateID)
@@ -380,8 +380,8 @@ class MessageWayAPI
 	public function sendViaIVR(string $mobile, int $templateID, int $provider = 1, array $options = []):array
 	{
 		$provider = $this->prepareProviders($provider,self::IVR_PROVIDERS);
-		return $this->setMethod('ivr')
-			->setConfig($options)
+		return $this->setConfig($options)
+			->setMethod('ivr')
 			->setMobile($mobile)
 			->setProvider($provider)
 			->setTemplateID($templateID)
@@ -412,7 +412,7 @@ class MessageWayAPI
 		if(is_string($provider)){
 			return array_flip($providerList)[$provider];
 		}
-		return $providerList[$provider];
+		return $provider;
 	}
 
 	/**
