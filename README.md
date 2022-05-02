@@ -4,11 +4,10 @@
 [![Total Downloads][ico-downloads]][link-downloads]
 ![Swagger][ico-swagger]
 [![MessageWay][ico-MSGWay]][link-MSGWay]
-![🇮🇷](https://github.com/MessageWay/MessageWayPHP/blob/main/README-fa.md)
 
 # MessageWay PHP SDK
 
-A PHP SDK for the MessageWay API.
+A PHP SDK for the MessageWay API. ([فارسی 🇮🇷](https://github.com/MessageWay/MessageWayPHP/blob/main/README-fa.md))
 
 ## Available Methods
 
