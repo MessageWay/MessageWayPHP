@@ -15,8 +15,8 @@ class MessageWayAPI
 		BASEURL = 'https://api.msgway.com',
 		ACCEPT_LANGUAGE = 'fa',
 
-		ENDPOINT_SEND = "/otp/send",
-		ENDPOINT_STATUS = "/otp/status",
+		ENDPOINT_SEND = "/send",
+		ENDPOINT_STATUS = "/status",
 		ENDPOINT_VERIFY = "/otp/verify",
 
 		MESSENGER_PROVIDERS = [1 => 'whatsapp', 2 => 'gap'],

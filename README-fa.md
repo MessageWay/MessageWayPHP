@@ -6,11 +6,10 @@
 [![Total Downloads][ico-downloads]][link-downloads]
 ![Swagger][ico-swagger]
 [![Global Smart OTP][ico-messageWay]][link-messageWay]
-![🇬🇧](https://github.com/MessageWay/MessageWayPHP/blob/main/README.md)
 
 # راه‌پیام
 
-این کتابخانه برای کار با سامانه راه‌پیام (MessageWay) آماده شده است.
+این کتابخانه برای کار با سامانه راه‌پیام (MessageWay) آماده شده است. ([English 🇬🇧](https://github.com/MessageWay/MessageWayPHP/blob/main/README.md))
 
 برای مشاهده نمونه کدها می‌توانید فایل‌های داخل پوشه [examples](https://github.com/MessageWay/MessageWayPHP/tree/main/examples)
 را بررسی کنید.
@@ -75,8 +74,7 @@ $ git clone git@github.com:MessageWay/MessageWayPHP.git
 همچنین دانلود پروژه با کلیک روی [این دکمه](https://github.com/MessageWay/MessageWayPHP/archive/refs/heads/main.zip) امکان‌پذیر
 است.
 
-سپس کدهای ذیل را در ابتدای فایل موردنظر درج کنید، مقدار apiKey را باید پس از ثبت نام از طریق منو پروژه‌ها در سایت **
-«راه‌پیام»** بدست آورید.
+سپس کدهای ذیل را در ابتدای فایل موردنظر درج کنید، مقدار apiKey را باید پس از ثبت نام از طریق منو پروژه‌ها در سایت **«راه‌پیام»** بدست آورید.
 
 <div dir=ltr>
 
@@ -167,7 +165,7 @@ try {
 
 ---
 
-##نمایش وضعیت OTP
+## نمایش وضعیت OTP
 
 <div dir=ltr>
 
