@@ -160,6 +160,16 @@ class MessageWayAPI
 	}
 
 	/**
+	 * @param array $params
+	 * @return $this
+	 */
+	public function setParams(array $params): MessageWayAPI
+	{
+		$this->config['params'] = $params;
+		return $this;
+	}
+
+	/**
 	 * @param string $param1
 	 * @return $this
 	 */
@@ -270,7 +280,7 @@ class MessageWayAPI
 			$this->setProvider($provider);
 		}
 		$required = ['method', 'mobile', 'templateID'];
-		$optional = ['countryCode', 'provider', 'length', 'code', 'param1', 'param2', 'param3', 'param4', 'param5', 'expireTime'];
+		$optional = ['countryCode', 'provider', 'length', 'code', 'params', 'expireTime'];
 		return $this->setEndpoint(self::ENDPOINT_SEND)->build($required, $optional)->sendRequest();
 	}
 
@@ -425,7 +435,9 @@ class MessageWayAPI
 		if (empty($this->apiKey)) {
 			throw new InvalidArgumentException("Please set `apiKey`");
 		}
-
+		if(!empty($this->config['params'])){
+			ksort($this->config['params']);
+		}
 		$params = [];
 		foreach ($requiredFields as $field) {
 			if (empty($this->config[$field])) {
