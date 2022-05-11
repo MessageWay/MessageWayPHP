@@ -160,52 +160,67 @@ class MessageWayAPI
 	}
 
 	/**
+	 * @param array $params
+	 * @return $this
+	 */
+	public function setParams(array $params): MessageWayAPI
+	{
+		$this->config['params'] = $params;
+		return $this;
+	}
+
+	/**
 	 * @param string $param1
 	 * @return $this
+	 * @deprecated
 	 */
 	public function setParam1(string $param1): MessageWayAPI
 	{
-		$this->config['param1'] = $param1;
+		$this->config['params'][0] = $param1;
 		return $this;
 	}
 
 	/**
 	 * @param string $param2
 	 * @return $this
+	 * @deprecated
 	 */
 	public function setParam2(string $param2): MessageWayAPI
 	{
-		$this->config['param2'] = $param2;
+		$this->config['params'][1] = $param2;
 		return $this;
 	}
 
 	/**
 	 * @param string $param3
 	 * @return $this
+	 * @deprecated
 	 */
 	public function setParam3(string $param3): MessageWayAPI
 	{
-		$this->config['param3'] = $param3;
+		$this->config['params'][2] = $param3;
 		return $this;
 	}
 
 	/**
 	 * @param string $param4
 	 * @return $this
+	 * @deprecated
 	 */
 	public function setParam4(string $param4): MessageWayAPI
 	{
-		$this->config['param4'] = $param4;
+		$this->config['params'][3] = $param4;
 		return $this;
 	}
 
 	/**
 	 * @param string $param5
 	 * @return $this
+	 * @deprecated
 	 */
 	public function setParam5(string $param5): MessageWayAPI
 	{
-		$this->config['param5'] = $param5;
+		$this->config['params'][4] = $param5;
 		return $this;
 	}
 
@@ -270,7 +285,7 @@ class MessageWayAPI
 			$this->setProvider($provider);
 		}
 		$required = ['method', 'mobile', 'templateID'];
-		$optional = ['countryCode', 'provider', 'length', 'code', 'param1', 'param2', 'param3', 'param4', 'param5', 'expireTime'];
+		$optional = ['countryCode', 'provider', 'length', 'code', 'params', 'expireTime'];
 		return $this->setEndpoint(self::ENDPOINT_SEND)->build($required, $optional)->sendRequest();
 	}
 
@@ -425,7 +440,9 @@ class MessageWayAPI
 		if (empty($this->apiKey)) {
 			throw new InvalidArgumentException("Please set `apiKey`");
 		}
-
+		if(!empty($this->config['params'])){
+			ksort($this->config['params']);
+		}
 		$params = [];
 		foreach ($requiredFields as $field) {
 			if (empty($this->config[$field])) {
