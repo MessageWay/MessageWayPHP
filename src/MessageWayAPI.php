@@ -18,6 +18,7 @@ class MessageWayAPI
 		ENDPOINT_SEND = "/send",
 		ENDPOINT_STATUS = "/status",
 		ENDPOINT_VERIFY = "/otp/verify",
+		ENDPOINT_TEMPLATE_GET = "/template/get",
 
 		MESSENGER_PROVIDERS = [1 => 'whatsapp', 2 => 'gap'],
 		SMS_PROVIDERS = [1 => '3000x', 2 => '2000x', 3 => '9000x'],
@@ -401,6 +402,48 @@ class MessageWayAPI
 			->setProvider($provider)
 			->setTemplateID($templateID)
 			->send();
+	}
+
+	/**
+	 * @param string $mobile
+	 * @param int $templateID
+	 * @param array $options
+	 * @return array
+	 * @throws Exception
+	 */
+	public function sendViaSmart(string $mobile, int $templateID, array $options = []):array
+	{
+		return $this->setConfig($options)
+			->setMethod('smart')
+			->setMobile($mobile)
+			->setTemplateID($templateID)
+			->send();
+	}
+
+	/**
+	 * @param int $templateID
+	 * @return array
+	 * @throws Exception
+	 */
+	public function getTemplate(int $templateID): array
+	{
+		$result = $this->setTemplateID($templateID)
+			->setEndpoint(self::ENDPOINT_TEMPLATE_GET)
+			->build(['templateID'])
+			->sendRequest();
+		if ($result['status'] != 'success') {
+			throw new InvalidArgumentException("An error occurred");
+		}
+		$patternMessage = $result['data']['template'] ?? [];
+		preg_match_all('/\[([A-Za-z0-9 ]+?)\]/', $patternMessage, $matches);
+		$patternParams = [];
+		foreach (current($matches) as $k => $param) {
+			$patternParams[$k] = str_replace(['[', ']'], '', $param);
+		}
+		return [
+			'template' => $patternMessage,
+			'params' => $patternParams
+		];
 	}
 
 	/**
