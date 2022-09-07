@@ -486,6 +486,10 @@ class MessageWayAPI
 		if(!empty($this->config['params'])){
 			ksort($this->config['params']);
 		}
+        $this->config['params'] = array_map(function ($param) {
+            return $param != NULL ? (string)$param : $param;
+        }, $this->config['params']);
+
 		$params = [];
 		foreach ($requiredFields as $field) {
 			if (empty($this->config[$field])) {
