@@ -11,7 +11,7 @@ use InvalidArgumentException;
 class MessageWayAPI
 {
 	protected const
-		VERSION = '1.0.1',
+		VERSION = '1.1.2',
 		BASEURL = 'https://api.msgway.com',
 		ACCEPT_LANGUAGE = 'fa',
 
@@ -277,7 +277,7 @@ class MessageWayAPI
 	 * @return array
 	 * @throws Exception
 	 */
-	public function send(string $method = '', int $provider = 0):array
+	public function send(string $method = '', int $provider = 0): array
 	{
 		if (!empty($method)) {
 			$this->setMethod($method);
@@ -355,9 +355,9 @@ class MessageWayAPI
 	 * @return array
 	 * @throws Exception
 	 */
-	public function sendViaSMS(string $mobile, int $templateID, int $provider = 1, array $options = []):array
+	public function sendViaSMS(string $mobile, int $templateID, int $provider = 1, array $options = []): array
 	{
-		$provider = $this->prepareProviders($provider,self::SMS_PROVIDERS);
+		$provider = $this->prepareProviders($provider, self::SMS_PROVIDERS);
 		return $this->setConfig($options)
 			->setMethod('sms')
 			->setMobile($mobile)
@@ -374,9 +374,9 @@ class MessageWayAPI
 	 * @return array
 	 * @throws Exception
 	 */
-	public function sendViaMessenger(string $mobile, int $templateID, $provider, array $options = []):array
+	public function sendViaMessenger(string $mobile, int $templateID, $provider, array $options = []): array
 	{
-		$provider = $this->prepareProviders($provider,self::MESSENGER_PROVIDERS);
+		$provider = $this->prepareProviders($provider, self::MESSENGER_PROVIDERS);
 		return $this->setConfig($options)
 			->setMethod('messenger')
 			->setMobile($mobile)
@@ -393,9 +393,9 @@ class MessageWayAPI
 	 * @return array
 	 * @throws Exception
 	 */
-	public function sendViaIVR(string $mobile, int $templateID, int $provider = 1, array $options = []):array
+	public function sendViaIVR(string $mobile, int $templateID, int $provider = 1, array $options = []): array
 	{
-		$provider = $this->prepareProviders($provider,self::IVR_PROVIDERS);
+		$provider = $this->prepareProviders($provider, self::IVR_PROVIDERS);
 		return $this->setConfig($options)
 			->setMethod('ivr')
 			->setMobile($mobile)
@@ -411,7 +411,7 @@ class MessageWayAPI
 	 * @return array
 	 * @throws Exception
 	 */
-	public function sendViaSmart(string $mobile, int $templateID, array $options = []):array
+	public function sendViaSmart(string $mobile, int $templateID, array $options = []): array
 	{
 		return $this->setConfig($options)
 			->setMethod('smart')
@@ -431,12 +431,9 @@ class MessageWayAPI
 			->setEndpoint(self::ENDPOINT_TEMPLATE_GET)
 			->build(['templateID'])
 			->sendRequest();
-		if ($result['status'] != 'success') {
-			throw new InvalidArgumentException("An error occurred");
-		}
 		$patternMessage = $result['data']['template'] ?? [];
+		$patternParams = $matches = [];
 		preg_match_all('/\[([A-Za-z0-9 ]+?)\]/', $patternMessage, $matches);
-		$patternParams = [];
 		foreach (current($matches) as $k => $param) {
 			$patternParams[$k] = str_replace(['[', ']'], '', $param);
 		}
@@ -467,7 +464,7 @@ class MessageWayAPI
 		if (!in_array($provider, $allowedProviders)) {
 			throw new InvalidArgumentException("Provider [$provider] is not supported.");
 		}
-		if(is_string($provider)){
+		if (is_string($provider)) {
 			return array_flip($providerList)[$provider];
 		}
 		return $provider;
@@ -483,8 +480,11 @@ class MessageWayAPI
 		if (empty($this->apiKey)) {
 			throw new InvalidArgumentException("Please set `apiKey`");
 		}
-		if(!empty($this->config['params'])){
+		if (!empty($this->config['params'])) {
 			ksort($this->config['params']);
+			array_walk($this->config['params'], function (&$param) {
+				$param = (string)$param;
+			});
 		}
 		$params = [];
 		foreach ($requiredFields as $field) {
