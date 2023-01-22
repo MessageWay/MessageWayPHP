@@ -12,7 +12,7 @@
         </testsuite>
     </testsuites>
     <php>
-        <env name="API_KEY" value="yourApiKey" force="true"/>
-        <env name="MOBILE" value="yourMobileNumber" force="true"/>
+        <env name="API_KEY" value="yourApiKey"/>
+        <env name="MOBILE" value="yourMobileNumber"/>
     </php>
 </phpunit>
