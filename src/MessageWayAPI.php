@@ -21,7 +21,7 @@ class MessageWayAPI
 		ENDPOINT_TEMPLATE_GET = "/template/get",
 
 		MESSENGER_PROVIDERS = [1 => 'whatsapp', 2 => 'gap'],
-		SMS_PROVIDERS = [1 => '3000x', 2 => '2000x', 3 => '9000x'],
+		SMS_PROVIDERS = [1 => '3000x', 2 => '2000x', 3 => '9000x', 4 => '5000x'],
 		IVR_PROVIDERS = [1 => 'ivr'];
 
 	/**
@@ -106,7 +106,9 @@ class MessageWayAPI
 	 */
 	public function setProvider(int $provider): MessageWayAPI
 	{
-		$this->config['provider'] = $provider;
+        if($provider != 0){
+            $this->config['provider'] = $provider;
+        }
 		return $this;
 	}
 
@@ -355,7 +357,7 @@ class MessageWayAPI
 	 * @return array
 	 * @throws Exception
 	 */
-	public function sendViaSMS(string $mobile, int $templateID, int $provider = 1, array $options = []): array
+	public function sendViaSMS(string $mobile, int $templateID, int $provider = 0, array $options = []): array
 	{
 		$provider = $this->prepareProviders($provider, self::SMS_PROVIDERS);
 		return $this->setConfig($options)
@@ -374,7 +376,7 @@ class MessageWayAPI
 	 * @return array
 	 * @throws Exception
 	 */
-	public function sendViaMessenger(string $mobile, int $templateID, $provider, array $options = []): array
+	public function sendViaMessenger(string $mobile, int $templateID, $provider = 0, array $options = []): array
 	{
 		$provider = $this->prepareProviders($provider, self::MESSENGER_PROVIDERS);
 		return $this->setConfig($options)
@@ -393,7 +395,7 @@ class MessageWayAPI
 	 * @return array
 	 * @throws Exception
 	 */
-	public function sendViaIVR(string $mobile, int $templateID, int $provider = 1, array $options = []): array
+	public function sendViaIVR(string $mobile, int $templateID, int $provider = 0, array $options = []): array
 	{
 		$provider = $this->prepareProviders($provider, self::IVR_PROVIDERS);
 		return $this->setConfig($options)
@@ -460,14 +462,10 @@ class MessageWayAPI
 	 */
 	protected function prepareProviders($provider, array $providerList): int
 	{
-		$allowedProviders = array_merge(array_keys($providerList), array_values($providerList));
-		if (!in_array($provider, $allowedProviders)) {
-			throw new InvalidArgumentException("Provider [$provider] is not supported.");
-		}
-		if (is_string($provider)) {
-			return array_flip($providerList)[$provider];
-		}
-		return $provider;
+        if (is_string($provider)) {
+            $providerList = array_flip($providerList);
+        }
+		return $providerList[$provider] ?? 0;
 	}
 
 	/**
