@@ -465,7 +465,7 @@ class MessageWayAPI
         if (is_string($provider)) {
             $providerList = array_flip($providerList);
         }
-		return $providerList[$provider] ?? 0;
+		return $providerList[$provider] ?? $provider;
 	}
 
 	/**
