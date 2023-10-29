@@ -11,10 +11,12 @@ A PHP SDK for the MessageWay API. ([فارسی 🇮🇷](https://github.com/Mess
 
 ## Available Methods
 
-- SMS (Iran: 2000, 3000, 9000)
+- SMS (Iran: 2000, 3000, 9000, 50004)
+- Global SMS (with Twilio)
 - Messenger
-    - [Whatsapp](https://whatsapp.com) Messenger
+    - ~~[Whatsapp](https://whatsapp.com) Messenger~~
     - [Gap](https://gap.im) Messenger
+    - [iGap](https://igap.net) Messenger
 - IVR
 
 ## Requirements
@@ -83,8 +85,8 @@ try {
 ### By  Messenger
 
 ```php
-$provider = 'whatsapp'; // whatsapp, gap
 try {
+	$provider = $messageWay->getProviderByName('gap');
 	$otp = $messageWay->sendViaMessenger($mobile, $templateID, $provider);
 	echo "referenceID: " . $otp['referenceID'] . PHP_EOL;
 	echo "sender: " . $otp['sender'] . PHP_EOL;

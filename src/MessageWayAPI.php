@@ -11,7 +11,7 @@ use InvalidArgumentException;
 class MessageWayAPI
 {
 	protected const
-		VERSION = '1.1.2',
+		VERSION = '2.0.0',
 		BASEURL = 'https://api.msgway.com',
 		ACCEPT_LANGUAGE = 'fa',
 
@@ -20,9 +20,14 @@ class MessageWayAPI
 		ENDPOINT_VERIFY = "/otp/verify",
 		ENDPOINT_TEMPLATE_GET = "/template/get",
 
-		MESSENGER_PROVIDERS = [1 => 'whatsapp', 2 => 'gap'],
-		SMS_PROVIDERS = [1 => '3000x', 2 => '2000x', 3 => '9000x', 4 => '5000x'],
-		IVR_PROVIDERS = [1 => 'ivr'];
+        PROVIDERS = [
+            // MESSENGER_PROVIDERS
+            'whatsapp' => 1,'gap' => 2 , 'igap' => 8,
+            // SMS_PROVIDERS
+            '3000x' => 1 , '2000x' => 2 , '9000x' => 3 , '5000x' => 4 , '50004x' => 5,
+            // IVR_PROVIDERS
+            'ivr' => 1
+        ];
 
 	/**
 	 * @var array
@@ -359,7 +364,6 @@ class MessageWayAPI
 	 */
 	public function sendViaSMS(string $mobile, int $templateID, int $provider = 0, array $options = []): array
 	{
-		$provider = $this->prepareProviders($provider, self::SMS_PROVIDERS);
 		return $this->setConfig($options)
 			->setMethod('sms')
 			->setMobile($mobile)
@@ -371,14 +375,13 @@ class MessageWayAPI
 	/**
 	 * @param string $mobile
 	 * @param int $templateID
-	 * @param int|string $provider
+	 * @param int $provider
 	 * @param array $options
 	 * @return array
 	 * @throws Exception
 	 */
-	public function sendViaMessenger(string $mobile, int $templateID, $provider = 0, array $options = []): array
+	public function sendViaMessenger(string $mobile, int $templateID, int $provider = 0, array $options = []): array
 	{
-		$provider = $this->prepareProviders($provider, self::MESSENGER_PROVIDERS);
 		return $this->setConfig($options)
 			->setMethod('messenger')
 			->setMobile($mobile)
@@ -397,7 +400,6 @@ class MessageWayAPI
 	 */
 	public function sendViaIVR(string $mobile, int $templateID, int $provider = 0, array $options = []): array
 	{
-		$provider = $this->prepareProviders($provider, self::IVR_PROVIDERS);
 		return $this->setConfig($options)
 			->setMethod('ivr')
 			->setMobile($mobile)
@@ -445,6 +447,19 @@ class MessageWayAPI
 		];
 	}
 
+    /**
+     * @param string $provider
+     * @return int
+     * @throws Exception
+     */
+    protected function getProviderByName(string $provider): int
+    {
+        if (empty($providerID = self::PROVIDERS[$provider])) {
+            throw new Exception("provider `{$provider}` is invalid");
+        }
+        return $providerID;
+    }
+
 	/**
 	 * @param string $endpoint
 	 * @return MessageWayAPI
@@ -453,19 +468,6 @@ class MessageWayAPI
 	{
 		$this->endpoint = self::BASEURL . $endpoint;
 		return $this;
-	}
-
-	/**
-	 * @param int|string $provider
-	 * @param array $providerList
-	 * @return int
-	 */
-	protected function prepareProviders($provider, array $providerList): int
-	{
-        if (is_string($provider)) {
-            $providerList = array_flip($providerList);
-        }
-		return $providerList[$provider] ?? $provider;
 	}
 
 	/**
