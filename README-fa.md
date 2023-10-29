@@ -16,10 +16,12 @@
 
 ## روش‌های ارسال
 
-- پیامک (از سرشماره‌های: 2000, 3000, 9000)
+- پیامک (از سرشماره‌های: 2000, 3000, 9000, 50004)
+- پیامک بین‌المللی (با twilio)
 - پیام‌رسان‌ها:
-    - پیام‌رسان [واتساپ](https://whatsapp.com)
+    - ~~پیام‌رسان [واتساپ](https://whatsapp.com)~~
     - پیام‌رسان [گپ](https://gap.im)
+    - پیام‌رسان [آی‌گپ](https://igap.net)
 - تماس صوتی
 
 ## نیازمندی‌ها
@@ -116,8 +118,8 @@ try {
 <div dir=ltr>
 
 ```php
-$provider = 'whatsapp'; // whatsapp, gap
 try {
+	$provider = $messageWay->getProviderByName('gap');
 	$otp = $messageWay->sendViaMessenger($mobile, $templateID, $provider);
 	echo "referenceID: " . $otp['referenceID'] . PHP_EOL;
 	echo "sender: " . $otp['sender'] . PHP_EOL;
