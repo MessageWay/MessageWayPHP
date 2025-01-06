@@ -174,9 +174,44 @@ try {
 ```php
 try {
 	$status = $messageWay->getStatus($OTPRefrenceID);
-    echo "OTPStatus: " . $status['OTPStatus'] . PHP_EOL;
+	echo "OTPStatus: " . $status['OTPStatus'] . PHP_EOL;
 	echo "OTPVerified: " . $status['OTPVerified'] . PHP_EOL;
 	echo "OTPMethod: " . $status['OTPMethod'] . PHP_EOL;
+} catch (Exception $e) {
+	echo "Error: " . $e->getMessage();
+}
+```
+
+</div>
+
+---
+
+## دریافت موجودی
+
+<div dir=ltr>
+
+```php
+try {
+    $balance = $messageWay->getBalance();
+    echo "Balance: " . $balance;
+} catch (Exception $e) {
+    echo "Error: " . $e->getMessage();
+}
+```
+
+</div>
+
+---
+
+## دریافت الگو
+
+<div dir=ltr>
+
+```php
+try {
+	$template = $messageWay->getTemplate($templateID);
+	echo "Template: " . $template['template'] . PHP_EOL;
+	echo "Params: " . implode(", ", $template['params']) . PHP_EOL;
 } catch (Exception $e) {
 	echo "Error: " . $e->getMessage();
 }

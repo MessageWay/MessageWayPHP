@@ -138,6 +138,34 @@ try {
 
 ---
 
+## Balance
+
+```php
+try {
+	$balance = $messageWay->getBalance();
+    echo "Balance: " . $balance;
+} catch (Exception $e) {
+	echo "Error: " . $e->getMessage();
+}
+```
+
+---
+
+## Get Template
+
+```php
+$templateID = 2;
+try {
+	$template = $messageWay->getTemplate($templateID);
+	echo "Template: " . $template['template'] . PHP_EOL;
+	echo "Params: " . implode(", ", $template['params']) . PHP_EOL;
+} catch (Exception $e) {
+	echo "Error: " . $e->getMessage();
+}
+```
+
+---
+
 
 ## License
 
