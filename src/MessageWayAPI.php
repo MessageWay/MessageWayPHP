@@ -19,6 +19,7 @@ class MessageWayAPI
 		ENDPOINT_STATUS = "/status",
 		ENDPOINT_VERIFY = "/otp/verify",
 		ENDPOINT_TEMPLATE_GET = "/template/get",
+		ENDPOINT_BALANCE_GET = "/balance/get",
 
         PROVIDERS = [
             // MESSENGER_PROVIDERS
@@ -448,6 +449,18 @@ class MessageWayAPI
 	}
 
     /**
+     * @return int
+     * @throws Exception
+     */
+    public function getBalance(): int
+    {
+        $result = $this->setEndpoint(self::ENDPOINT_BALANCE_GET)
+            ->build([])
+            ->sendRequest();
+        return $result['data']['balance'] ?? 0;
+    }
+
+    /**
      * @param string $provider
      * @return int
      * @throws Exception
@@ -498,7 +511,9 @@ class MessageWayAPI
 				$params[$field] = $this->config[$field];
 			}
 		}
-		$this->requestParams = json_encode($params);
+		if(!empty($params)){
+			$this->requestParams = json_encode($params);
+		}
 		$this->requestHeaders = [
 			"Content-Type: application/json",
 			"accept-language: $this->acceptLanguage",
@@ -514,14 +529,17 @@ class MessageWayAPI
 	protected function sendRequest(): array
 	{
 		$curl = curl_init();
-		curl_setopt_array($curl, [
+		$options = [
 			CURLOPT_URL => $this->endpoint,
 			CURLOPT_RETURNTRANSFER => true,
 			CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
 			CURLOPT_CUSTOMREQUEST => 'POST',
-			CURLOPT_POSTFIELDS => $this->requestParams,
 			CURLOPT_HTTPHEADER => $this->requestHeaders,
-		]);
+		];
+		if(!empty($this->requestParams)){
+			$options[CURLOPT_POSTFIELDS] = $this->requestParams;
+		}
+		curl_setopt_array($curl, $options);
 		$response = curl_exec($curl);
 		if ($response === false) {
 			throw new Exception(curl_error($curl));
